@@ -1,0 +1,41 @@
+
+name: Release Firmware
+
+on:
+  workflow_run:
+    workflows: ["openwrt-builder"]
+    types:
+      - completed
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ github.run_number }}"
+          name: "OpenWrt Build ${{ github.run_number }}"
+          body: "自动发布的固件版本"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload firmware
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./bin/targets/**/*.bin
+            ./bin/targets/**/*.img
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
