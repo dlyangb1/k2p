@@ -19,4 +19,4 @@
 # Modify hostname
 #sed -i 's/OpenWrt/P3TERX-Router/g' package/base-files/files/bin/config_generate
 
-sed -i 's/DEFAULT_PACKAGES +=/DEFAULT_PACKAGES := base-files busybox uci curl kmod-tun tinyproxy/' target/linux/ramips/mt7621/target.mk
+sed -i 's/DEFAULT_PACKAGES +=/DEFAULT_PACKAGES := base-files busybox uci curl kmod-tun tinyproxy kmod-tcp-bbr kmod-sched-core kmod-shortcut-fe shortcut-fe luci-app-turboacc/' target/linux/ramips/mt7621/target.mk
